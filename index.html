@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hangman Game</title>
+  </head>
+  <body>
+    <h1>Hangman Game</h1>
+    <p id="guessed-word"></p>
+    <p id="incorrect-guesses"></p>
+    <p id="remaining-attempts"></p>
+    <form id="guess-form" autocomplete="off">
+      <input type="text" id="guess-input" placeholder="Guess a letter or the whole word" />
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+const words = ['apple', 'banana', 'cherry', 'dragonfruit', 'elderberry'];
+const chosenWord = words[Math.floor(Math.random() * words.length)];
+const guessedWord = Array(chosenWord.length).fill('_');
+const incorrectGuesses = [];
+const maxAttempts = 6;
+let attempts = 0;
+
+function displayGameState() {
+  console.log('Guessed word: ' + guessedWord.join(' '));
+  console.log('Incorrect guesses: ' + incorrectGuesses.join(', '));
+  console.log(`Attempts remaining: ${maxAttempts - attempts}`);
+}
+
+function askForInput() {
+  return prompt('Guess a letter or the whole word: ');
+}
+
+while (attempts < maxAttempts && guessedWord.join('') !== chosenWord) {
+  displayGameState();
+  const guess = askForInput().toLowerCase();
+
+  if (guess.length === 1) {
+    let found = false;
+
+    for (let i = 0; i < chosenWord.length; i++) {
+      if (chosenWord[i] === guess && guessedWord[i] === '_') {
+        guessedWord[i] = guess;
+        found = true;
+      }
+    }
+
+    if (!found && !incorrectGuesses.includes(guess)) {
+      incorrectGuesses.push(guess);
+      attempts++;
+    }
+  } else if (guess.length === chosenWord.length) {
+    if (guess === chosenWord) {
+      guessedWord.splice(0, guessedWord.length, ...chosenWord.split(''));
+    } else {
+      attempts++;
+    }
+  }
+}
+
+displayGameState();
+
+if (guessedWord.join('') === chosenWord) {
+  alert('Congratulations! You won! The word was: ' + chosenWord);
+} else {
+  alert('Sorry, you lost. The correct word was: ' + chosenWord);
+}
+</script>
+</html>
