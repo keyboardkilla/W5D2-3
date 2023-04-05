@@ -32,7 +32,12 @@ function askForInput() {
 
 while (attempts < maxAttempts && guessedWord.join('') !== chosenWord) {
   displayGameState();
-  const guess = askForInput().toLowerCase();
+  const guessInput = askForInput();
+  
+  if (guessInput === null) {
+    continue;
+  }
+  const guess = guessInput.toLowerCase();
 
   if (guess.length === 1) {
     let found = false;
